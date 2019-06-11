@@ -1,76 +1,59 @@
 from aiohttp import web
 
+from core.utils import json_to_str
+
+HTTP_OK = 200
+HTTP_CREATED = 201
+
+
+def _form_response(data: (dict, list), status_code: int = HTTP_OK) -> web.Response:
+    if isinstance(data, dict) or isinstance(data, list):
+        content_type = "application/json"
+        body = json_to_str(data).encode("utf-8")
+    else:
+        raise Exception(f"Unexpected '{type(data).__name__}' data type for response")
+
+    return web.Response(
+        body=body,
+        content_type=content_type,
+        status=status_code
+    )
+
 
 async def create_user(request: web.Request):
-    return web.Response(
-        body="create user",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def get_user(request: web.Request):
-    return web.Response(
-        body="get user by id",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def list_users(request: web.Request):
-    return web.Response(
-        body="list users",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def create_order(request: web.Request):
-    return web.Response(
-        body="create order",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def get_order(request: web.Request):
-    return web.Response(
-        body="get order",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def list_orders(request: web.Request):
-    return web.Response(
-        body="list orders",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def complete_orders(request: web.Request):
-    return web.Response(
-        body="complete orders",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def active_orders(request: web.Request):
-    return web.Response(
-        body="active orders",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 async def waiting_orders(request: web.Request):
-    return web.Response(
-        body="waiting orders",
-        content_type="text/plain",
-        status=200
-    )
+    return _form_response({})
 
 
 ROUTES = [

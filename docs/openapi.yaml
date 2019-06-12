@@ -1,0 +1,162 @@
+---
+
+openapi: 3.0.0
+
+info:
+  title: PositiveBucks API
+  version: 0.1
+
+components:
+  responses:
+    NotFound:
+      description: Item not found
+
+  schemas:
+    User:
+      type: object
+      properties:
+        uid:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+
+    Order:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [ 1, 2 ]
+
+tags:
+  - name: Info
+  - name: Users
+  - name: Orders
+
+paths:
+  /healthcheck:
+    get:
+      security: []
+      tags: [ Info ]
+      summary: Returns OK message
+      responses:
+        200:
+          description: A simple OK response
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/v1/users:
+    get:
+      tags: [ Users ]
+      summary: Fetch all users
+      responses:
+        200:
+          description: A list of User items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags: [ Users ]
+      summary: Create User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  required: true
+                email:
+                  type: string
+                  required: true
+      responses:
+        201:
+          description: Successfull response
+
+  /api/v1/users/{uid}:
+    get:
+      tags: [ Users ]
+      summary: Fetch user
+      parameters:
+        - name: uid
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: A User item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+            $ref: '#/components/responses/NotFound'
+
+  /api/v1/orders:
+    get:
+      tags: [ Orders ]
+      summary: Fetch all orders
+      responses:
+        200:
+          description: A list of Order items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      tags: [ Orders ]
+      summary: Create Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_type:
+                  type: integer
+                  enum: [ 1, 2 ]
+                  required: true
+                user_uid:
+                  type: string
+      responses:
+        201:
+          description: Successfull response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    uid:
+                      type: integer
+
+  /api/v1/orders/{uid}:
+    get:
+      tags: [ Orders ]
+      summary: Fetch order
+      parameters:
+        - name: uid
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: A Order item response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        404:
+            $ref: '#/components/responses/NotFound'

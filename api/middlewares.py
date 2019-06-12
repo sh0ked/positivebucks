@@ -14,6 +14,13 @@ log = logging.getLogger(__name__)
 def _form_error_response(
     user_message: str, status_code: int, internal_message: str = None
 ):
+    """Функция для формирования ответа с ошибками
+
+    :param user_message:
+    :param status_code:
+    :param internal_message:
+    :return:
+    """
     body = {
         "errors": [
             {
@@ -30,6 +37,12 @@ def _form_error_response(
 
 
 async def request_middleware(app, handler):
+    """Прослойка для отлова базовых ошибок
+
+    :param app:
+    :param handler:
+    :return:
+    """
     async def middleware(request):
         try:
             response = await handler(request)

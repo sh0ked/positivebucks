@@ -3,10 +3,10 @@ from datetime import timedelta
 
 import settings
 from core.utils import get_datetime_with_tz
-from core.storages import OrdersStorage, UsersStorage
 from core.statuses import OrderStatuses
-from core.models.orders import get_order_impl
+from core.storages import UsersStorage, OrdersStorage
 from core.models.users import get_user_impl
+from core.models.orders import get_order_impl
 
 
 class Orders:
@@ -48,6 +48,11 @@ class Orders:
         })
 
     async def _pretty_by_status(self, status: str):
+        """Универсальный метод получения информации о заказах в красивом виде
+
+        :param status:
+        :return:
+        """
         pretty_list = []
         orders_list = await self.list(filters={"status": status})
         for order_dict in orders_list:

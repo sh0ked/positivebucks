@@ -1,12 +1,12 @@
-import logging
 import asyncio
+import logging
+
 from aiohttp import web
 
 from core.queue import OrdersQueue
+from core.storages import UsersStorage, OrdersStorage
 from core.cases.users import Users
 from core.cases.orders import Orders
-from core.storages import UsersStorage, OrdersStorage
-
 
 log = logging.getLogger(__name__)
 
@@ -17,10 +17,10 @@ class ApiApplication(web.Application):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        user_storage = UsersStorage()
-        orders_storage = OrdersStorage()
-        self.users = Users(user_storage)
-        self.orders = Orders(orders_storage, user_storage)
+        self._user_storage = UsersStorage()
+        self._orders_storage = OrdersStorage()
+        self.users = Users(self._user_storage)
+        self.orders = Orders(self._orders_storage, self._user_storage)
         self.queue = OrdersQueue(self.orders)
 
         self.on_startup.append(self.startup_func)

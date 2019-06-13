@@ -57,9 +57,30 @@ pip3 install -r requirements.test.txt
 ## Переопределение основных настроек (но можно ничего не трогать)
 Переопределить можно в settings.py или через переменные окружения операционной системы
 
-## Запуск приложения
+## Проверка стиля
+```bash
+PYTHONPATH=$(pwd) flake8 .
+```
+
+## Проверить и пофиксать сортировку импортов isort
+```bash
+PYTHONPATH=$(pwd) isort -rc .
+```
+
+## Запуск тестов (совсем чуток)
+```bash
+PYTHONPATH=$(pwd) pytest tests
+```
+
+## Запуск приложения локально
 ```bash
 python3 manage.py --api
 ```
-После запуска API-приложение доступно по дефолтному адресу http://localhost:8000
+После запуска API-приложение доступно по дефолтному адресу http://localhost:8000.
+
 Так же для удобства выполнения запросов и изучения структуры API сделан Swagger UI и доступен он по адресу http://localhost:8000/docs
+
+## Запуск приложения через docker-compose
+```bash
+docker-compose up --build positivebucks
+```

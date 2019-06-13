@@ -1,0 +1,11 @@
+version: "2"
+services:
+  positivebucks:
+    build: .
+    image: positivebucks:latest
+    container_name: "positivebucks-api"
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=positivebucks
+    command: python3 /app/manage.py --api

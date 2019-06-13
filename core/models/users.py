@@ -1,8 +1,25 @@
+from abc import ABC, abstractmethod
 from uuid import uuid4
+from typing import Type
 
 
-class BaseUser:
-    def __init__(self, uid: str = None, name: str = "Unnamed", email: str = None):
+class BaseUser(ABC):
+    uid: str
+    name: str
+    email: str
+
+    @classmethod
+    @abstractmethod
+    def from_dict(cls, data: dict):
+        raise NotImplementedError
+
+    @abstractmethod
+    def to_dict(self):
+        raise NotImplementedError
+
+
+class User:
+    def __init__(self, uid: str = None, name: str = "UnnamedUser", email: str = None):
         self.uid = uid or str(uuid4())
         self.name = name
         self.email = email
@@ -19,9 +36,8 @@ class BaseUser:
         }
 
 
-class User(BaseUser):
-    pass
-
-
-def get_user_impl() -> User:
+def get_user_impl() -> Type[User]:
     return User
+
+
+BaseUser.register(User)

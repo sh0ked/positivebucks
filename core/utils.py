@@ -1,7 +1,7 @@
-import ujson
 import logging
 from datetime import datetime, timezone
 
+import ujson
 
 log = logging.getLogger(__name__)
 

@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from abc import ABC, abstractmethod
 from enum import Enum
 from datetime import datetime
 
@@ -16,7 +17,7 @@ class CoffeeTypes(Enum):
     AMERICANO = 2
 
 
-class Order:
+class Order(ABC):
     name: str = "Unnamed Order"
     cook_time: int = 1
 
@@ -29,6 +30,7 @@ class Order:
         self._modified = modified or get_datetime_with_tz()
 
     @property
+    @abstractmethod
     def type(self):
         raise NotImplementedError
 
@@ -77,6 +79,7 @@ class Order:
         await self._cook()
         log.info(f"Order '{self.name}' #{self.uid} was completed.")
 
+    @abstractmethod
     async def _cook(self):
         raise NotImplementedError
 
@@ -142,3 +145,8 @@ def get_order_impl(order_type: int) -> (Cappucino, Americano):
         return Americano
 
     raise OrderCreationException(f"Order with type {order_type} wasn't found.")
+
+
+Order.register(Coffee)
+Order.register(Cappucino)
+Order.register(Americano)

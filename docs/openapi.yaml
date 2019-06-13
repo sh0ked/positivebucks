@@ -160,3 +160,64 @@ paths:
                 $ref: '#/components/schemas/Order'
         404:
             $ref: '#/components/responses/NotFound'
+
+  /api/v1/orders/table:
+    get:
+      tags: [ Orders ]
+      summary: Fetch table orders
+      responses:
+        200:
+          description: A list of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_name:
+                      type: string
+                    order_uid:
+                      type: integer
+
+  /api/v1/orders/active:
+    get:
+      tags: [ Orders ]
+      summary: Fetch active orders
+      responses:
+        200:
+          description: A list of Order items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /api/v1/orders/completed:
+    get:
+      tags: [ Orders ]
+      summary: Fetch complete orders
+      responses:
+        200:
+          description: A list of Order items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /api/v1/orders/waiting:
+    get:
+      tags: [ Orders ]
+      summary: Fetch waiting orders
+      responses:
+        200:
+          description: A list of Order items response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'

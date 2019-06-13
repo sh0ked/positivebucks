@@ -7,7 +7,6 @@ from aiohttp.web_exceptions import HTTPError
 import settings
 from core.utils import json_to_str
 
-
 log = logging.getLogger(__name__)
 
 

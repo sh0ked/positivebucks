@@ -1,14 +1,14 @@
 import logging
+
 from aiohttp import web
 
 from api.app import create_app as create_api_app
-
 
 log = logging.getLogger(__name__)
 
 
 async def healthcheck(request):
-    """Простая проверка "живо ли" приложение
+    """Простая проверка на "живость" приложения
 
     :param request:
     :return:

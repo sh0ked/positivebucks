@@ -1,9 +1,8 @@
 from aiohttp import web
 
-from core.utils import json_to_str, is_int
 from api.app import ApiApplication
-from core.exceptions import UserNotFoundException, OrderCreationException
-
+from core.utils import is_int, json_to_str
+from core.exceptions import UserNotFoundException, OrderCreationException, UserCreationException
 
 HTTP_OK = 200
 HTTP_CREATED = 201
@@ -40,7 +39,14 @@ async def create_user(request: Request):
     :return: Новый клиент
     """
     body = await request.json()
-    name, email = body.get("name"), body.get("email")
+
+    name = body.get("name")
+    if not name:
+        raise UserCreationException(f"UID key wasn't found in {name}")
+
+    email = body.get("email")
+    if not email:
+        raise UserCreationException(f"Email key wasn't found in {email}")
 
     user = await request.app.users.create(**{"name": name, "email": email})
 
@@ -175,7 +181,7 @@ ROUTES = [
     web.get("/orders/{uid:\d+}", get_order),
     web.get("/orders", list_orders),
     web.get("/orders/table", table_orders),
-    web.get("/orders/complete", completed_orders),
+    web.get("/orders/completed", completed_orders),
     web.get("/orders/active", active_orders),
     web.get("/orders/waiting", waiting_orders),
 ]

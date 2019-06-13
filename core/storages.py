@@ -1,16 +1,15 @@
-import logging
 import asyncio
+import logging
 from typing import List
 
 from core.utils import get_datetime_from_timestamp_with_tz
 from core.exceptions import StorageException
 
-
 log = logging.getLogger(__name__)
 
 
 class BaseStorage:
-    def __init__(self, entries = None):
+    def __init__(self, entries: dict = None):
         self._entries = entries or {}
         self._lock = asyncio.Lock()
 

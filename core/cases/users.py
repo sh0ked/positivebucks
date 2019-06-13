@@ -1,18 +1,18 @@
+import asyncio
 from typing import List
 
-from core.models.users import User
 from core.storages import UsersStorage
-from core.exceptions import UserCreationException
+from core.models.users import User
 
 
 class Users:
     def __init__(self, storage: UsersStorage):
         self._storage = storage
 
-        import asyncio
+        # TODO: убрать создание тестовго пользователя
         asyncio.ensure_future(self.create(**{
-            "name": "Алешка",
-            "email": "test@test.ru",
+            "name": "Илон",
+            "email": "elon@musk.com",
         }))
 
     async def all(self) -> List[dict]:
@@ -45,13 +45,5 @@ class Users:
         :param user_dict:
         :return:
         """
-        name = user_dict.get("name")
-        if not name:
-            raise UserCreationException(f"UID key wasn't found in {name}")
-
-        email = user_dict.get("email")
-        if not email:
-            raise UserCreationException(f"Email key wasn't found in {email}")
-
         user = User.from_dict(user_dict)
         return await self._storage.create(**user.to_dict())

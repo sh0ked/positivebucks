@@ -1,0 +1,15 @@
+.env*
+.idea
+.git
+Dockerfile
+**/__pycache__
+.pytest_cache
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.cache
+*.log

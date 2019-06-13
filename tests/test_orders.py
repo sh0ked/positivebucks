@@ -1,19 +1,24 @@
-from core.models.orders import Order
+from core.models.orders import Order, Cappucino
 
 
 def test_user_init():
-    uid, name = 0, "TestOrder"
-    user = Order(uid=uid)
+    uid, name = 0, "Cappucino"
+    user = Cappucino(uid=uid)
 
+    assert isinstance(user, Order)
     assert user.uid == uid
+    assert user.name == name
 
 
 def test_user_from_dict():
     data = {
         "uid": 0,
-        "name": "TestOrder",
+        "name": "Cappucino",
     }
-    user = Order.from_dict(data)
+    user = Cappucino.from_dict(data)
 
+    assert isinstance(user, Order)
     assert user.uid == data["uid"]
     assert user.name == data["name"]
+
+# так мало потому, что просто пример

@@ -1,6 +1,7 @@
 from uuid import uuid4
 
-from core.models.users import User, BaseUser
+from core.models.bases import BaseUser
+from core.models.users import User
 
 
 def test_user_init():

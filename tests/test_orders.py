@@ -1,11 +1,12 @@
-from core.models.orders import Order, Cappucino
+from core.models.bases import BaseOrder
+from core.models.orders import Cappucino
 
 
 def test_user_init():
     uid, name = 0, "Cappucino"
     user = Cappucino(uid=uid)
 
-    assert isinstance(user, Order)
+    assert isinstance(user, BaseOrder)
     assert user.uid == uid
     assert user.name == name
 
@@ -17,7 +18,7 @@ def test_user_from_dict():
     }
     user = Cappucino.from_dict(data)
 
-    assert isinstance(user, Order)
+    assert isinstance(user, BaseOrder)
     assert user.uid == data["uid"]
     assert user.name == data["name"]
 

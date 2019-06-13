@@ -1,9 +1,11 @@
 import asyncio
 import logging
-from abc import ABC, abstractmethod
+
 from enum import Enum
+from typing import Type
 from datetime import datetime
 
+from core.models.bases import BaseOrder
 from core.utils import get_datetime_with_tz, get_datetime_from_timestamp_with_tz
 from core.statuses import OrderStatuses
 from core.exceptions import OrderCreationException
@@ -17,22 +19,41 @@ class CoffeeTypes(Enum):
     AMERICANO = 2
 
 
-class Order(ABC):
-    name: str = "Unnamed Order"
-    cook_time: int = 1
+class Coffee(BaseOrder):
+    _name: str = "Unnamed Coffee"
+    _cook_time: int = 1
 
     def __init__(self, uid: int = 0, status: int = OrderStatuses.UNKNOWN.value,
                  user_uid: int = None, created: datetime = None, modified: datetime = None):
-        self.uid = uid
+        self._uid = uid
         self._status = status
-        self.user_uid = user_uid
-        self.created = created or get_datetime_with_tz()
+        self._user_uid = user_uid
+        self._created = created or get_datetime_with_tz()
         self._modified = modified or get_datetime_with_tz()
 
     @property
-    @abstractmethod
+    def uid(self):
+        return self._uid
+
+    @property
+    def cook_time(self):
+        return self._cook_time
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def user_uid(self):
+        return self._user_uid
+
+    @property
     def type(self):
-        raise NotImplementedError
+        raise CoffeeTypes.UNKNOWN.value
+
+    @property
+    def created(self):
+        return self._created
 
     @property
     def modified(self):
@@ -79,9 +100,8 @@ class Order(ABC):
         await self._cook()
         log.info(f"Order '{self.name}' #{self.uid} was completed.")
 
-    @abstractmethod
     async def _cook(self):
-        raise NotImplementedError
+        await asyncio.sleep(self.cook_time)
 
     @classmethod
     def from_dict(cls, data: dict):
@@ -108,20 +128,9 @@ class Order(ABC):
         }
 
 
-class Coffee(Order):
-    name: str = "Unnamed Coffee"
-
-    @property
-    def type(self):
-        return CoffeeTypes.UNKNOWN.value
-
-    async def _cook(self):
-        await asyncio.sleep(self.cook_time)
-
-
 class Cappucino(Coffee):
-    name: str = "Cappucino"
-    cook_time = 20
+    _name: str = "Cappucino"
+    _cook_time = 20
 
     @property
     def type(self):
@@ -129,24 +138,19 @@ class Cappucino(Coffee):
 
 
 class Americano(Coffee):
-    name: str = "Americano"
-    cook_time = 10
+    _name: str = "Americano"
+    _cook_time = 10
 
     @property
     def type(self):
         return CoffeeTypes.AMERICANO.value
 
 
-def get_order_impl(order_type: int) -> (Cappucino, Americano):
+def get_order_impl(order_type: int) -> Type[Coffee]:
     if order_type == CoffeeTypes.CAPPUCINO.value:
         return Cappucino
 
     if order_type == CoffeeTypes.AMERICANO.value:
         return Americano
 
-    raise OrderCreationException(f"Order with type {order_type} wasn't found.")
-
-
-Order.register(Coffee)
-Order.register(Cappucino)
-Order.register(Americano)
+    raise OrderCreationException(f"Order with type {order_type} wasn't exist for creating.")

@@ -1,28 +1,26 @@
-from abc import ABC, abstractmethod
 from uuid import uuid4
 from typing import Type
 
-
-class BaseUser(ABC):
-    uid: str
-    name: str
-    email: str
-
-    @classmethod
-    @abstractmethod
-    def from_dict(cls, data: dict):
-        raise NotImplementedError
-
-    @abstractmethod
-    def to_dict(self):
-        raise NotImplementedError
+from core.models.bases import BaseUser
 
 
-class User:
+class User(BaseUser):
     def __init__(self, uid: str = None, name: str = "UnnamedUser", email: str = None):
-        self.uid = uid or str(uuid4())
-        self.name = name
-        self.email = email
+        self._uid = uid or str(uuid4())
+        self._name = name
+        self._email = email
+
+    @property
+    def uid(self):
+        return self._uid
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def email(self):
+        return self._email
 
     @classmethod
     def from_dict(cls, data: dict):
@@ -36,8 +34,5 @@ class User:
         }
 
 
-def get_user_impl() -> Type[User]:
+def get_user_impl() -> Type[BaseUser]:
     return User
-
-
-BaseUser.register(User)
